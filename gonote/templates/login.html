@@ -1,0 +1,26 @@
+<head>
+    <title>Log in</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="{{ STATIC_URL}}css/bootstrap.min.css" type="text/css" >
+    <style>
+        .form-signin {width: 30%; margin: 0 auto;}
+        input,button {margin: 5px;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    {{ state }}
+    <form action="/login/" method="post" class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="inputLogin" class="sr-only">User name</label>
+        <input name="username" type="text" id="inputLogin" class="form-control" placeholder="User name" required="" autofocus="">
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+
+</div>
+</body>
+</html>
