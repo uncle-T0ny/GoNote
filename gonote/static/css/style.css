@@ -1,3 +1,13 @@
-.notes-menu {float: left; width: 20%; height: 100%; border: 1px solid silver;}
+.notes-menu {float: left; width: 20%; height:  100%; border: 1px solid silver;}
 .jumbotron {margin-left: 20%;}
-.notes-content {height: 100%}
+.notes-content {height: 100%;}
+
+/* fix, to set redactor height*/
+.redactor_toolbar:after { clear: none !important; }
+
+.noteTitle {height: 40px;}
+
+#title {width: 80%; float: left;}
+#submitBtn {float: right; width: 19%; float: right;}
+
+button[type='button'], input[type='text'] {border-radius: 0px; !important;  }

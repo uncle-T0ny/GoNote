@@ -1,9 +1,17 @@
 
-<div class="notes-menu" id="jstree_demo_div">
+<div class="notes-menu" id="jstree_div">
 
 </div>
 
-<div class="jumbotron notes-content">
+<div class="content jumbotron notes-content" style="border: 1px solid silver;">
     <h4> {{ user }} welcome to GoNote.</h4>
-    <div id="note-text"></div>
+    <div class="noteTitle">
+        <input id="title" type="text" class="form-control" placeholder="Title">
+        <button id="submitBtn" type="button" class="btn btn-default" onclick="saveNote();">Submit</button>
+    </div>
+    <div id="editor"> </div>
+
+    {# hidden #}
+    <input id="noteId" value="-1" class="hide" type="text"/>
+
 </div>
