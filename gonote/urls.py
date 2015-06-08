@@ -1,7 +1,7 @@
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
 from gonote.views import index, login_view, login, logout
-from note.views import get_all_notes, get_note, insert_note
+from note.views import get_all_notes, get_note, add_delete_note
 
 admin.autodiscover()
 
@@ -15,5 +15,5 @@ urlpatterns = patterns('',
 
     (r'^notes/$', get_all_notes),
     (r'^note/(\d+)$', get_note),
-    (r'^note/$', insert_note),
+    (r'^note/$', add_delete_note),
 )
