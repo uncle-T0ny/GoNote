@@ -7,8 +7,6 @@ Requirements.
 TODO:
     create js converter from json object from server to json object for jstree plugin
 
-    Исправить кодировку.
-
     Поиск по названию заметок в дереве.
 
     Поиск по содержимому заметок.
