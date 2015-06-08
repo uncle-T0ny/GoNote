@@ -1,6 +1,10 @@
-.notes-menu {float: left; width: 20%; height:  100%; border: 1px solid silver;}
-.jumbotron {margin-left: 20%;}
-.notes-content {height: 100%;}
+.treeSearchBlock { width: 20%; }
+.treeSearchBlock > input { width: 100%; }
+.treeSearchBlock .form-control {border: 0px solid #ccc; border-bottom: 1px solid #ccc; border-radius: 0px;}
+.treeSearchBlock .form-control:focus {-webkit-box-shadow:0; box-shadow:0;border-color:transparent;}
+.notes-menu {float: left; width: 20%; height:  100%;}
+.notes-content {height: 100%;margin-left: 20%; padding: 48px;}
+
 
 /* fix, to set redactor height*/
 .redactor_toolbar:after { clear: none !important; }
@@ -11,3 +15,5 @@
 #submitBtn {float: right; width: 19%; float: right;}
 
 button[type='button'], input[type='text'] {border-radius: 0px; !important;  }
+
+.redactor_editor {border: 3px solid #D7D7D7 !important; }

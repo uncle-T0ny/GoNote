@@ -26,9 +26,19 @@ function loadNotes(needDestroy) {
                 'data': notes_arr,
                 'check_callback' : true
             },
-            'plugins' : [ 'contextmenu', 'crrm', "ui"],
+            'plugins' : [ 'contextmenu', 'crrm', "ui", "search" ],
             contextmenu: {items: customMenu}
         });
+
+        var to;
+        $('#treeSearchInp').keyup(function () {
+            if(to) { clearTimeout(to); }
+            to = setTimeout(function () {
+                var v = $('#treeSearchInp').val();
+                $('#jstree_div').jstree(true).search(v);
+            }, 250);
+        });
+
     });
 
     $('#jstree_div').on("select_node.jstree", function (e, data) {
