@@ -29,6 +29,7 @@ TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = []
 
+DEFAULT_CHARSET = 'utf-8'
 
 # Application definition
 
@@ -40,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'note',
+    'folder'
 )
 
 MIDDLEWARE_CLASSES = (

@@ -1,5 +1,6 @@
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
+from folder.views import add_delete_folder, get_all_folders
 from gonote.views import index, login_view, login, logout
 from note.views import get_all_notes, get_note, add_delete_note
 
@@ -16,4 +17,7 @@ urlpatterns = patterns('',
     (r'^notes/$', get_all_notes),
     (r'^note/(\d+)$', get_note),
     (r'^note/$', add_delete_note),
+
+    (r'^folders/$', get_all_folders),
+    (r'^folder/$', add_delete_folder),
 )
