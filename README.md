@@ -17,6 +17,8 @@ export DB_USER="Value"
 export DJANGO_APP_SECRET_KEY="Value"
 
 
+Project integrated with heroku.
+
 TODO:
     create js converter from json object from server to json object for jstree plugin
 
