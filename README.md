@@ -1,4 +1,9 @@
 # GoNote
+
+for psycopg2 need to install:
+sudo apt-get install libpq-dev python-dev
+sudo apt-get build-dep python-psycopg2
+
 to run project install packages:
 pip install -r requirements.txt
 
