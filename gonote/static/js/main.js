@@ -7,12 +7,18 @@ $(document).ready(function() {
     loadNotes();
 });
 
-
+function blockUI() {
+    $.blockUI({'message': $('#progressBar') ,
+        'css': { 'backgroundColor': 'transparent', border: '0px',}});
+}
+function unblockUI() {
+    $.unblockUI();
+}
 
 function loadNotes(needDestroy) {
     if (needDestroy)
         $('#jstree_div').jstree().destroy();
-
+    blockUI();
 
     $.when(                 // multiple ajax call
 
@@ -76,6 +82,7 @@ function loadNotes(needDestroy) {
 
             }
 
+            unblockUI();
             cache['treeItems'] = treeItems;
 
             $('#jstree_div').jstree({
@@ -104,11 +111,13 @@ function loadNotes(needDestroy) {
         if (data.node.id.indexOf('folder') >= 0) {
             return;
         }
+        blockUI();
         $.get('/note/' + data.node.original.noteid, function(note) {
             $("#noteId").val(note[0].pk);
             $("#folderId").val(note[0].fields.folder_id);
             $('#title').val(note[0].fields.title);
             $('#editor').html(note[0].fields.html_text);
+            unblockUI();
         });
     });
 
@@ -116,9 +125,10 @@ function loadNotes(needDestroy) {
     //    var noteId = data.node.original.noteid;
     //    deleteNote(noteId);
     //});
-}
+};
 
 function deleteNote(noteId) {
+    blockUI();
     $.ajax({
         url: '/note/',
         type: 'DELETE',
@@ -132,10 +142,13 @@ function deleteNote(noteId) {
         },
         error : function(result) {
         }
+    }).always(function() {
+        unblockUI();
     });
 }
 
 function deleteFolder(folderId) {
+    blockUI();
     $.ajax({
         url: '/folder/',
         type: 'DELETE',
@@ -149,6 +162,8 @@ function deleteFolder(folderId) {
         },
         error : function(result) {
         }
+    }).always(function() {
+        unblockUI();
     });
 }
 
@@ -173,6 +188,7 @@ function saveFolder() {
 
     var obj = {'folderId': folderId,'name' : folderName, 'parent_folder_id': parentFolderId};
 
+    blockUI();
     $.ajax({
         url: '/folder/',
         type: 'POST',
@@ -186,6 +202,8 @@ function saveFolder() {
         error : function(result) {
             $.growl.error({ message: "Some errors occurred: " + result });
         }
+    }).always(function() {
+        unblockUI();
     });
 
 }
@@ -203,6 +221,7 @@ function saveNote() {
     if (!noteId) noteId = -1;
     var obj = {'noteId' : noteId, 'title': title, 'html_text': html, 'folder': folderId};
 
+    blockUI();
     $.ajax({
         url: '/note/',
         type: 'POST',
@@ -221,6 +240,8 @@ function saveNote() {
         error : function(result) {
             $.growl.error({ message: "Some errors occurred: " + result });
         }
+    }).always(function() {
+        unblockUI();
     });
 
 }
