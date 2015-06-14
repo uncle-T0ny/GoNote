@@ -3,6 +3,7 @@ var cache = {};
 $(document).ready(function() {
 
     $('#editor').redactor();
+    $('#deleteBtn').hide();
 
     loadNotes();
 });
@@ -16,9 +17,9 @@ function unblockUI() {
 }
 
 function loadNotes(needDestroy) {
+    blockUI();
     if (needDestroy)
         $('#jstree_div').jstree().destroy();
-    blockUI();
 
     $.when(                 // multiple ajax call
 
@@ -76,7 +77,8 @@ function loadNotes(needDestroy) {
                         "folderId" : notes[note].fields.folder_id,
                         "parent" : parentNodeId,
                         "text" : notes[note].fields.title,
-                        "icon": "glyphicon glyphicon-bookmark"
+                        "icon": "glyphicon glyphicon-bookmark",
+                         "class": "jstree-dragable"
                     }
                 );
 
@@ -90,7 +92,11 @@ function loadNotes(needDestroy) {
                     'data': treeItems,
                     'check_callback' : true
                 },
-                'plugins' : ['crrm', "ui", "search" ],
+                'plugins' : ['crrm', 'ui', 'search' ],
+            });
+
+            $('#jstree_div').bind("move_node.jstree", function (event, data){
+                console.log('drag & drop')
             });
 
             var to;
@@ -108,9 +114,19 @@ function loadNotes(needDestroy) {
 
 
     $('#jstree_div').on("select_node.jstree", function (e, data) {
-        if (data.node.id.indexOf('folder') >= 0) {
+
+        if (data.node.id.indexOf('root') >= 0) {
+            $('#deleteBtn').hide();
             return;
+        } else if (data.node.id.indexOf('folder') >= 0) {
+            $('#deleteBtn').text('Delete folder');
+            $('#deleteBtn').show();
+            return;
+        } else {
+            $('#deleteBtn').text('Delete note');
+            $('#deleteBtn').show();
         }
+
         blockUI();
         $.get('/note/' + data.node.original.noteid, function(note) {
             $("#noteId").val(note[0].pk);

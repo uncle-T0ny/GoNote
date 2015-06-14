@@ -22,6 +22,8 @@ Project integrated with heroku.
 TODO:
     create js converter from json object from server to json object for jstree plugin
 
+    - добавить сохранение файлов к заметке.
+
     - добавить попапы при создании папки/заметки
 
     - добавить возможность создавать категории,

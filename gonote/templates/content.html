@@ -6,7 +6,7 @@
         <button type="button" onclick="prepareView4NewNote();" class="btn btn-primary" >Add note</button>
         <button type="button" class="btn btn-info"  data-toggle="modal" data-target="#myModal" >Add folder</button>
 
-        <button type="button" style="float:right;" onclick="deleteSelectedNode();" class="btn btn-danger" >Delete</button>
+        <button type="button" style="float:right;" onclick="deleteSelectedNode();" id="deleteBtn" class="btn btn-danger" >Delete</button>
     </div>
 
 </div>
@@ -15,7 +15,7 @@
 
 </div>
 
-<div class="content notes-content" style="border: 1px solid silver;">
+<div class="content notes-content" >
     <h4> {{ user }} welcome to GoNote.</h4>
     <div class="noteTitle">
         <input id="title" type="text" class="form-control" >
