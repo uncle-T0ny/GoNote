@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{{ STATIC_URL}}css/style.css" type="text/css" >
     <script src="{{ STATIC_URL}}js/jquery-2.1.4.min.js" type="text/javascript"></script>
     <script src="{{ STATIC_URL}}js/main.js" type="text/javascript"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     {# for jsTree   #}
     <link rel="stylesheet" href="{{ STATIC_URL}}tree/themes/default/style.min.css" />
     <script src="{{ STATIC_URL}}tree/jstree.min.js" type="text/javascript"></script>
@@ -32,3 +33,26 @@
 </body>
 
 </html>
+
+{#      Modal contents    #}
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5>Create new folder</h5>
+            </div>
+            <div class="modal-body">
+                <label for="folderName" >name</label>
+                <input id="folderName" style="width: 80%;" type="text" class="form-control" placeholder="Input name"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="saveFolder();" class="btn btn-info" data-dismiss="modal">Create</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponse
 from django.core import serializers
 from folder.models import Folder
@@ -12,8 +13,10 @@ def add_delete_folder(request):
         Folder.objects.get(user = request.user.id, pk=request.body.decode()).delete()
         return HttpResponse("OK")
     elif request.method == 'POST':
-        folder = Folder.objects.filter(user = request.user.id, pk=request.body.decode())
-        if folder.pk == '-1':     #create new note
+        decoded_json = request.body.decode('utf8')
+        folder = json.loads(decoded_json, object_hook=Folder.json_decoder)
+        folder.user = request.user
+        if int(folder.pk) == -1:     #create new folder
             folder.pk = None
         folder.save()
         return HttpResponse(folder.pk)
