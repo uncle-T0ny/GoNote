@@ -228,10 +228,9 @@ function saveNote() {
     var noteId = $("#noteId").val();
     var title = $('#title').val();
     var html = $('#editor').html();
-    var selectedNode = $('#jstree_div').jstree('get_selected')[0];
-    var folderId = $("#folderId").val();
-    if (selectedNode && selectedNode.indexOf('folder') >= 0) {
-        folderId = selectedNode.substring('folder_'.length);
+    var folderId = getSelectedFolderId();
+    if (parseInt(folderId) < 0) {
+        folderId = $("#folderId").val();
     }
 
     if (!noteId) noteId = -1;

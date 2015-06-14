@@ -3,9 +3,8 @@
     <input type="search" placeholder="Search" class="form-control" id="treeSearchInp"/>
 
     <div class="tree-btns-group">
-        <button type="button" onclick="prepareView4NewNote();" class="btn btn-primary" >Add note</button>
+        <button id="addNoteBtn" type="button" onclick="prepareView4NewNote();" class="btn btn-primary" >Add note</button>
         <button type="button" class="btn btn-info"  data-toggle="modal" data-target="#myModal" >Add folder</button>
-
         <button type="button" style="float:right;" onclick="deleteSelectedNode();" id="deleteBtn" class="btn btn-danger" >Delete</button>
     </div>
 
@@ -18,10 +17,10 @@
 <div class="content notes-content" >
     <h4> {{ user }} welcome to GoNote.</h4>
     <div class="noteTitle">
-        <input id="title" type="text" class="form-control" >
-        <button id="submitBtn" type="button" class="btn btn-default" onclick="saveNote();">Submit</button>
+        <input id="title" placeholder="Title" type="text" class="form-control" >
     </div>
     <div id="editor"> </div>
+    <button id="submitBtn" type="button" class="btn btn-default" onclick="saveNote();">Save</button>
 
     {# hidden #}
     <input id="noteId" value="-1" class="hide" type="text"/>
