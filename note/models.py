@@ -10,5 +10,9 @@ class Note(models.Model):
     html_text = models.TextField(null=True)
     last_use_date_time = models.DateTimeField(auto_now=True)
     folder_id = models.IntegerField(default=-1)
+
     def json_decoder(obj):
-        return Note(title=obj['title'], pk=obj['noteId'],html_text=obj['html_text'], folder_id=obj['folder'])
+        return Note(title=obj['title'], pk=obj['noteId'], html_text=obj['html_text'], folder_id=obj['folder'])
+
+    def __repr__(self):
+        return 'Note: ' + self.title + ' pk: ' + str(self.pk)

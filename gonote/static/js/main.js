@@ -119,11 +119,17 @@ function loadNotes(needDestroy) {
             $('#deleteBtn').hide();
             return;
         } else if (data.node.id.indexOf('folder') >= 0) {
-            $('#deleteBtn').text('Delete folder');
-            $('#deleteBtn').show();
+            if (data.node.children.length > 0) {
+                $('#deleteBtn').hide();
+            } else {
+                $('#deleteBtn').text('Delete folder');
+                $('#deleteBtn').show();
+                $('#deleteBtn').attr('onclick', 'deleteSelectedNode(true, \''+ data.node.id +'\')');
+            }
             return;
         } else {
             $('#deleteBtn').text('Delete note');
+            $('#deleteBtn').attr('onclick', 'deleteSelectedNode(false, \''+ data.node.id +'\')');
             $('#deleteBtn').show();
         }
 
@@ -144,6 +150,7 @@ function loadNotes(needDestroy) {
 };
 
 function deleteNote(noteId) {
+    noteId = parseInt(noteId);
     blockUI();
     $.ajax({
         url: '/note/',
@@ -164,6 +171,7 @@ function deleteNote(noteId) {
 }
 
 function deleteFolder(folderId) {
+    folderId = parseInt(folderId);
     blockUI();
     $.ajax({
         url: '/folder/',
@@ -280,15 +288,11 @@ function getSelectedNoteId(selectedNodeId) {
     }
 }
 
-function deleteSelectedNode() {
-    var selectedNodeId = $('#jstree_div').jstree('get_selected')[0];
-    var selectedFolderId = parseInt(getSelectedFolderId(selectedNodeId));
-    var selectedNoteId = parseInt(getSelectedNoteId(selectedNodeId));
-    //todo delete folder functionality
-    if (selectedFolderId != 'root') {
-        deleteFolder(selectedFolderId);
-    }
-    if (selectedNoteId >= 0) {
-        deleteNote(selectedNoteId);
+function deleteSelectedNode(ifFolder, nodeId) {
+    if (ifFolder) {
+        deleteFolder(nodeId.substring('folder_'.length));
+    } else {
+        deleteNote(nodeId.substring('note_'.length));
+
     }
 }
