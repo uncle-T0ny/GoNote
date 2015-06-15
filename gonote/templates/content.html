@@ -22,8 +22,16 @@
     <div id="editor"> </div>
     <button id="submitBtn" type="button" class="btn btn-default" onclick="saveNote();">Save</button>
 
+    <form action="/file/" method="post" enctype="multipart/form-data">
+
+        <input id="noteId" name="noteId" value="-1" class="hide" type="text"/>
+
+        <p><input style="width:300px; margin: 2px;" class="form-control" type="file" name="docfile"/></p>
+        <p><input style="width:300px; margin: 2px;"  class="form-control" type="submit" value="Upload" /></p>
+    </form>
+
+
     {# hidden #}
-    <input id="noteId" value="-1" class="hide" type="text"/>
     <input id="folderId" value="-1" class="hide" type="text"/>
 
 </div>

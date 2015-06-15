@@ -13,6 +13,10 @@ ALLOWED_HOSTS = []
 
 DEFAULT_CHARSET = 'utf-8'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -23,7 +27,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'note',
-    'folder'
+    'folder',
+    'document'
 )
 
 MIDDLEWARE_CLASSES = (
