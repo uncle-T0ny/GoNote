@@ -163,12 +163,34 @@ function loadNoteFiles(noteId) {
         var linksHtml = "";
         for(var idx in files) {
             var filePath = files[idx].fields.docfile;
+            var fileId = files[idx].pk;
             var fileUrl = '/media/' + filePath;
-            linksHtml += "<div><a target='_blank' class='glyphicon glyphicon-download-alt'" +
-            " href='"+ fileUrl +"'>"+filePath.substring(filePath.lastIndexOf('/') + 1)+"</div></a>";
+            linksHtml += "<div id='fileLink_"+fileId+"'><a target='_blank' class='glyphicon glyphicon-download-alt'" +
+            " href='"+ fileUrl +"'>"+filePath.substring(filePath.lastIndexOf('/') + 1)+"</a>" +
+                " <a class='glyphicon glyphicon-remove' onclick='deleteFile("+fileId+");'></a></div>";
         }
         $('#fileLinks').html(linksHtml);
         $('#fileLinks').unblock();
+    });
+}
+
+function deleteFile(fileId) {
+    fileId = parseInt(fileId);
+    blockUI();
+    $.ajax({
+        url: '/file/',
+        type: 'DELETE',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(fileId),
+        dataType: "text",
+        success: function(fileId) {
+            $('#fileLink_' + fileId).remove();
+            $.growl.notice({title:'Notice!', message: "File deleted successful." });
+        },
+        error : function(result) {
+        }
+    }).always(function() {
+        unblockUI();
     });
 }
 
@@ -184,7 +206,6 @@ function deleteNote(noteId) {
         success: function(result) {
             $.jstree.reference("#jstree_div").delete_node('note_' + noteId);
             $.growl.notice({title:'Notice!', message: "Note deleted successful." });
-            console.log(result)
         },
         error : function(result) {
         }
