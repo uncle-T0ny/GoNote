@@ -20,3 +20,5 @@ button[type='button'], input[type='text'] {border-radius: 0px; !important;  }
 
 .redactor_editor {border: 3px solid #D7D7D7 !important; }
 
+#fileLinks {margin-top: 15px; height: 100px;}
+#uploadFileBtn {opacity: 0.7}

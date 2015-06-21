@@ -38,7 +38,7 @@
 </html>
 
 {#      Modal contents    #}
-<div class="modal fade" id="myModal" role="dialog">
+<div class="modal fade" id="addFolderModal" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -59,6 +59,27 @@
 
     </div>
 </div>
+
+<div class="modal fade" id="uploadFileModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <form action="/file/" method="post" enctype="multipart/form-data">
+                    <input id="noteId" name="noteId" value="-1" class="hide" type="text"/>
+                    <p><input style="width:300px; margin: 2px;" class="form-control" type="file" name="docfile"/></p>
+                    <p><input style="width:300px; margin: 2px;"  class="form-control" type="submit" value="Upload" /></p>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 <div class="hide">
     <div class='progress' id="progressBar">

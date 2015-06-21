@@ -10,6 +10,7 @@ class Note(models.Model):
     html_text = models.TextField(null=True)
     last_use_date_time = models.DateTimeField(auto_now=True)
     folder_id = models.IntegerField(default=-1)
+    has_files = models.BooleanField(default=False)
 
     def json_decoder(obj):
         return Note(title=obj['title'], pk=obj['noteId'], html_text=obj['html_text'], folder_id=obj['folder'])

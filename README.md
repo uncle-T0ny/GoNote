@@ -20,21 +20,15 @@ export DJANGO_APP_SECRET_KEY="Value"
 Project integrated with heroku.
 
 TODO:
-    create js converter from json object from server to json object for jstree plugin
 
     - добавить сохранение файлов к заметке.
 
+    - прикрутить jQuery File Upload
+        https://blueimp.github.io/jQuery-File-Upload/
+
     - добавить валидацию файлов.
 
-    - добавить попапы при создании папки/заметки
-
-    - добавить возможность создавать категории,
-
-        CRUD для категорий,
-        переименование категорий
-        возможность перетаскивать папки/заметки
-        валидация при удалении папки, если папка не пустая- не разрешать удалять
-
+    - добавить возможность переименования папки
 
     - Поиск по содержимому заметок.
 

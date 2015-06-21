@@ -75,6 +75,7 @@ function loadNotes(needDestroy) {
                         "id" : 'note_' + notes[note].pk,
                         "noteid" : notes[note].pk,
                         "folderId" : notes[note].fields.folder_id,
+                        "hasFiles" : notes[note].fields.has_files,
                         "parent" : parentNodeId,
                         "text" : notes[note].fields.title,
                         "icon": "glyphicon glyphicon-bookmark",
@@ -114,7 +115,7 @@ function loadNotes(needDestroy) {
 
 
     $('#jstree_div').on("select_node.jstree", function (e, data) {
-
+        var hasFiles = data.node.original.hasFiles;
         if (data.node.id.indexOf('root') >= 0) {
             $('#deleteBtn').hide();
             return;
@@ -134,13 +135,20 @@ function loadNotes(needDestroy) {
         }
 
         blockUI();
-        $.get('/note/' + data.node.original.noteid, function(note) {
-            $("#noteId").val(note[0].pk);
+        $.get('/note/' + data.node.original.noteid, function (note) {
+            var noteId = note[0].pk;
+            $("#noteId").val(noteId);
             $("#folderId").val(note[0].fields.folder_id);
             $('#title').val(note[0].fields.title);
             $('#editor').html(note[0].fields.html_text);
+            if (hasFiles) {
+                loadNoteFiles(noteId);
+            } else {
+                $('#fileLinks').html('');
+            }
             unblockUI();
         });
+
     });
 
     //$('#jstree_div').on('delete_node.jstree', function (e, data) {
@@ -148,6 +156,21 @@ function loadNotes(needDestroy) {
     //    deleteNote(noteId);
     //});
 };
+
+function loadNoteFiles(noteId) {
+    $('#fileLinks').block({ message: 'file loading...' });
+    $.get('/note/' + noteId + '/files/', function(files) {
+        var linksHtml = "";
+        for(var idx in files) {
+            var filePath = files[idx].fields.docfile;
+            var fileUrl = '/media/' + filePath;
+            linksHtml += "<div><a target='_blank' class='glyphicon glyphicon-download-alt'" +
+            " href='"+ fileUrl +"'>"+filePath.substring(filePath.lastIndexOf('/') + 1)+"</div></a>";
+        }
+        $('#fileLinks').html(linksHtml);
+        $('#fileLinks').unblock();
+    });
+}
 
 function deleteNote(noteId) {
     noteId = parseInt(noteId);

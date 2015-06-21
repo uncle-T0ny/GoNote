@@ -1,5 +1,6 @@
 import json
 from django.http import HttpResponse
+from document.models import Document
 from note.models import Note
 from django.core import serializers
 
@@ -11,9 +12,9 @@ def get_all_notes(request):
 
 def get_note(request, note_id):
     if request.method == 'GET':
+        note = Note.objects.filter(user = request.user.id, pk = note_id)
         return HttpResponse(
-            serializers.serialize('json', Note.objects.filter(user = request.user.id, pk = note_id), indent=2, use_natural_keys=False),
-            content_type="application/json")
+            serializers.serialize('json', note, indent=2, use_natural_keys=False), content_type="application/json")
 
 def add_delete_note(request):
     if request.method == 'DELETE':
@@ -27,3 +28,8 @@ def add_delete_note(request):
             note.pk = None
         note.save()
         return HttpResponse(note.pk)
+
+def get_note_files(request, note_id):
+    files = Document.objects.filter(user = request.user.id, note_id = note_id)
+    return HttpResponse(
+        serializers.serialize('json', files, indent=2, use_natural_keys=False), content_type="application/json")

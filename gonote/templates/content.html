@@ -4,7 +4,7 @@
 
     <div class="tree-btns-group">
         <button id="addNoteBtn" type="button" onclick="prepareView4NewNote();" class="btn btn-primary" >Add note</button>
-        <button type="button" class="btn btn-info"  data-toggle="modal" data-target="#myModal" >Add folder</button>
+        <button type="button" class="btn btn-info"  data-toggle="modal" data-target="#addFolderModal" >Add folder</button>
         <button type="button" style="float:right;" onclick="deleteSelectedNode();" id="deleteBtn" class="btn btn-danger" >Delete</button>
     </div>
 
@@ -15,23 +15,19 @@
 </div>
 
 <div class="content notes-content" >
-    <h4> {{ user }} welcome to GoNote.</h4>
     <div class="noteTitle">
         <input id="title" placeholder="Title" type="text" class="form-control" >
     </div>
     <div id="editor"> </div>
     <button id="submitBtn" type="button" class="btn btn-default" onclick="saveNote();">Save</button>
 
-    <form action="/file/" method="post" enctype="multipart/form-data">
-
-        <input id="noteId" name="noteId" value="-1" class="hide" type="text"/>
-
-        <p><input style="width:300px; margin: 2px;" class="form-control" type="file" name="docfile"/></p>
-        <p><input style="width:300px; margin: 2px;"  class="form-control" type="submit" value="Upload" /></p>
-    </form>
-
+    <button id="uploadFileBtn" style="margin-top:10px;" type="button" class="btn btn-info"  data-toggle="modal" data-target="#uploadFileModal" >Upload file</button>
 
     {# hidden #}
     <input id="folderId" value="-1" class="hide" type="text"/>
+
+    <div id="fileLinks">
+
+    </div>
 
 </div>
