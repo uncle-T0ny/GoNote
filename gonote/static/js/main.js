@@ -1,11 +1,28 @@
 var cache = {};
+var allowSaveNote = true;
+var saveNoteTimeout = 1000;
+
+var t1;
+var t2;
 
 $(document).ready(function() {
 
     $('#editor').redactor();
     $('#deleteBtn').hide();
-
+    $('#submitBtn').show();
     loadNotes();
+
+
+    $('#editor').keyup(function () {
+        t2 = new Date().getTime();
+        if (allowSaveNote) {
+            if (!t1 || ((t2-t1) > saveNoteTimeout)) {
+                t1 = new Date().getTime();
+                allowSaveNote = false;
+                saveNote(true);
+            }
+        }
+    });
 });
 
 function blockUI() {
@@ -116,6 +133,8 @@ function loadNotes(needDestroy) {
 
     $('#jstree_div').on("select_node.jstree", function (e, data) {
         var hasFiles = data.node.original.hasFiles;
+        $('#editorLabel').text('Edit note');
+        $('#submitBtn').hide();
         if (data.node.id.indexOf('root') >= 0) {
             $('#deleteBtn').hide();
             return;
@@ -236,9 +255,11 @@ function deleteFolder(folderId) {
 }
 
 function prepareView4NewNote() {
+    $('#editorLabel').text('New note');
     $("#noteId").val(-1);
     $('#title').val('');
     $('#editor').html('');
+    $('#fileLinks').html('');
 }
 
 function prepareView4NewFolder() {
@@ -253,6 +274,7 @@ function saveFolder() {
         parentFolderId = selectedFolderId;
     }
     var folderId = -1;
+
 
     var obj = {'folderId': folderId,'name' : folderName, 'parent_folder_id': parentFolderId};
 
@@ -276,7 +298,7 @@ function saveFolder() {
 
 }
 
-function saveNote() {
+function saveNote(autoSave) {
     var noteId = $("#noteId").val();
     var title = $('#title').val();
     var html = $('#editor').html();
@@ -288,27 +310,37 @@ function saveNote() {
     if (!noteId) noteId = -1;
     var obj = {'noteId' : noteId, 'title': title, 'html_text': html, 'folder': folderId};
 
-    blockUI();
-    $.ajax({
+    if (!autoSave) {
+        blockUI();
+    }
+    return $.ajax({
         url: '/note/',
         type: 'POST',
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(obj),
         dataType: "text",
         success: function(result) {
-            if (noteId == -1) {
-                $.growl.notice({title:'Notice!', message: "Note created successful." });
-            } else {
-                $.growl.notice({title:'Notice!', message: "Note updated successful." });
-            }
             $("#noteId").val(result);
-            loadNotes(true);
+            if (!autoSave) {
+                if (noteId == -1) {
+                    $.growl.notice({title:'Notice!', message: "Note created successful." });
+                } else {
+                    $.growl.notice({title:'Notice!', message: "Note updated successful." });
+                }
+                loadNotes(true);
+            }
         },
         error : function(result) {
-            $.growl.error({ message: "Some errors occurred: " + result });
-        }
+            if (!autoSave) {
+                $.growl.error({ message: "Some errors occurred: " + result });
+            }
+        },
+        timeout: saveNoteTimeout
     }).always(function() {
-        unblockUI();
+        if (!autoSave) {
+            unblockUI();
+        }
+        allowSaveNote = true;
     });
 
 }
