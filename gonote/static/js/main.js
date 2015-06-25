@@ -16,16 +16,16 @@ $(document).ready(function() {
     $('#editor').keyup(function () {
         if ($('#noteId').val() > 0) {
 
-
-            t2 = new Date().getTime();
-            if (allowSaveNote) {
-                if (!t1 || ((t2-t1) > saveNoteTimeout)) {
-                    t1 = new Date().getTime();
-                    allowSaveNote = false;
-                    saveNote(true);
+            setTimeout(function() {
+                t2 = new Date().getTime();
+                if (allowSaveNote) {
+                    if (!t1 || ((t2-t1) > saveNoteTimeout)) {
+                        t1 = new Date().getTime();
+                        allowSaveNote = false;
+                        saveNote(true);
+                    }
                 }
-            }
-
+            }, 400);
 
         }
 
