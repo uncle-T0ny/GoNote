@@ -1,6 +1,6 @@
 var cache = {};
 var allowSaveNote = true;
-var saveNoteTimeout = 1000;
+var saveNoteTimeout = 400;
 
 var t1;
 var t2;
@@ -14,14 +14,21 @@ $(document).ready(function() {
 
 
     $('#editor').keyup(function () {
-        t2 = new Date().getTime();
-        if (allowSaveNote) {
-            if (!t1 || ((t2-t1) > saveNoteTimeout)) {
-                t1 = new Date().getTime();
-                allowSaveNote = false;
-                saveNote(true);
+        if ($('#noteId').val() > 0) {
+
+
+            t2 = new Date().getTime();
+            if (allowSaveNote) {
+                if (!t1 || ((t2-t1) > saveNoteTimeout)) {
+                    t1 = new Date().getTime();
+                    allowSaveNote = false;
+                    saveNote(true);
+                }
             }
+
+
         }
+
     });
 });
 
@@ -260,6 +267,7 @@ function prepareView4NewNote() {
     $('#title').val('');
     $('#editor').html('');
     $('#fileLinks').html('');
+    $('#submitBtn').show();
 }
 
 function prepareView4NewFolder() {
