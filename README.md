@@ -15,9 +15,11 @@ export DB_NAME="Value"
 export DB_PASSWORD="Value"
 export DB_USER="Value"
 export DJANGO_APP_SECRET_KEY="Value"
+
 export SOCIAL_AUTH_TWITTER_KEY="Value"
 export SOCIAL_AUTH_TWITTER_SECRET="Value"
-
+export SOCIAL_AUTH_FACEBOOK_KEY="Value"
+export SOCIAL_AUTH_FACEBOOK_SECRET"="Value"
 
 Project integrated with heroku.
 

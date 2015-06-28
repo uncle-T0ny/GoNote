@@ -12,7 +12,7 @@
 
 <style>
     .social-btns {margin-top: 30px;}
-    .social-btns > a {  width: 200px;margin: 0 auto;}
+    .social-btns a {  width: 200px;margin: 0 auto;}
 </style>
 
 <div class="container">
@@ -31,6 +31,12 @@
     <div class="social-btns">
         <a class="btn btn-block btn-social btn-twitter" href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}">
             <i class="fa fa-twitter"></i> Sign in with Twitter
+        </a>
+    </div>
+
+    <div class="social-btns">
+        <a class="btn btn-block btn-social btn-twitter" href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">
+            <i class="fa fa-facebook"></i> Sign in with Facebook
         </a>
     </div>
 
