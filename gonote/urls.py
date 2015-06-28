@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     (r'^login-page/$', login_view),
     (r'^login/$', login),
     (r'^logout/$', logout),
+    url('', include('social.apps.django_app.urls', namespace='social')),
 
     (r'^notes/$', get_all_notes),
     (r'^note/(\d+)$', get_note),

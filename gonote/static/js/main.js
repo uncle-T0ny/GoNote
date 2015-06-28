@@ -343,7 +343,7 @@ function saveNote(autoSave) {
                 $.growl.error({ message: "Some errors occurred: " + result });
             }
         },
-        timeout: saveNoteTimeout
+        timeout: autoSave ?saveNoteTimeout:0
     }).always(function() {
         if (!autoSave) {
             unblockUI();
