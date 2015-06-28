@@ -3,6 +3,11 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="{{ STATIC_URL}}css/bootstrap.min.css" type="text/css" >
     <link rel="stylesheet" href="{{ STATIC_URL}}css/font-awesome.min.css" type="text/css" >
+
+        {# for jquery BlockUI#}
+    <script src="{{ STATIC_URL}}js/jquery-2.1.4.min.js" type="text/javascript"></script>
+    <script src="http://malsup.github.io/jquery.blockUI.js" type="text/javascript"></script>
+
     <style>
         .form-signin {width: 30%; margin: 0 auto;}
         input,button {margin: 5px;}
@@ -14,6 +19,12 @@
     .social-btns {margin-top: 30px;}
     .social-btns a {  width: 200px;margin: 0 auto;}
 </style>
+
+<script>
+    function waitForLoad() {
+        $.blockUI({'message': 'Please wait ...'});
+    }
+</script>
 
 <div class="container">
 
@@ -29,17 +40,16 @@
 
 
     <div class="social-btns">
-        <a class="btn btn-block btn-social btn-twitter" href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}">
+        <a class="btn btn-block btn-social btn-twitter" onclick="waitForLoad();" href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}">
             <i class="fa fa-twitter"></i> Sign in with Twitter
         </a>
     </div>
 
     <div class="social-btns">
-        <a class="btn btn-block btn-social btn-twitter" href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">
+        <a class="btn btn-block btn-social btn-twitter" onclick="waitForLoad();" href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">
             <i class="fa fa-facebook"></i> Sign in with Facebook
         </a>
     </div>
-
 
 </div>
 </body>
