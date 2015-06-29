@@ -4,6 +4,7 @@ var saveNoteTimeout = 400;
 
 var timer;
 
+
 $(document).ready(function() {
 
     $('#editor').redactor();
@@ -18,9 +19,7 @@ $(document).ready(function() {
             timer = setTimeout(function() {
                 saveNote(true);
             }, saveNoteTimeout);
-
         }
-
     });
 });
 
@@ -32,10 +31,8 @@ function unblockUI() {
     $.unblockUI();
 }
 
-function loadNotes(needDestroy) {
+function loadNotes() {
     blockUI();
-    if (needDestroy)
-        $('#jstree_div').jstree().destroy();
 
     $.when(                 // multiple ajax call
 
@@ -101,11 +98,14 @@ function loadNotes(needDestroy) {
 
     $('#jstree_div').on("select_node.jstree", function (e, data) {
         //open node
-        data.instance.toggle_node(data.node);
+        if (!data.node.state.opened) {
+            data.instance.toggle_node(data.node);
+        }
 
         var hasFiles = data.node.original.hasFiles;
         $('#editorLabel').text('Edit note');
         $('#submitBtn').hide();
+        $('#uploadFileBtn').show();
         if (data.node.id.indexOf('root') >= 0) {
             $('#deleteBtn').hide();
             return;
@@ -228,6 +228,7 @@ function prepareView4NewNote() {
     $('#editor').html('');
     $('#fileLinks').html('');
     $('#submitBtn').show();
+    $('#uploadFileBtn').hide();
 }
 
 function saveFolder() {
@@ -239,7 +240,6 @@ function saveFolder() {
     }
     var folderId = -1;
 
-
     var obj = {'folderId': folderId,'name' : folderName, 'parent_folder_id': parentFolderId};
 
     blockUI();
@@ -249,9 +249,12 @@ function saveFolder() {
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(obj),
         dataType: "text",
-        success: function(result) {
+        success: function(newFolderId) {
             $.growl.notice({title:'Notice!', message: "Folder created successful." });
-            loadNotes(true);
+            var newFolder = jsonProcessor.buildFolder(newFolderId,
+                                                      parentFolderId,
+                                                      folderName);
+            createAndSelectNode(newFolder);
         },
         error : function(result) {
             $.growl.error({ message: "Some errors occurred: " + result });
@@ -283,35 +286,42 @@ function saveNote(autoSave) {
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(obj),
         dataType: "text",
-        success: function(result) {
-            $("#noteId").val(result);
-
-            //todo save note
-            //$('#jstree_div').jstree("create_node", "#",
-            // {"data":JSON.parse('{"parent":"#","id":"folder_root1","text":"Root1","icon":"glyphicon glyphicon-folder-open",
-            // "state":{"opened":true}}') }, 'last');
+        success: function (noteId) {
+            $("#noteId").val(noteId);
 
             if (!autoSave) {
                 if (noteId == -1) {
-                    $.growl.notice({title:'Notice!', message: "Note created successful." });
+                    $.growl.notice({title: 'Notice!', message: "Note created successful."});
                 } else {
-                    $.growl.notice({title:'Notice!', message: "Note updated successful." });
+                    $.growl.notice({title: 'Notice!', message: "Note updated successful."});
                 }
-                loadNotes(true);
+
+                var newNote = jsonProcessor.buildNote(noteId,
+                    folderId,
+                    false,
+                    title);
+
+                createAndSelectNode(newNote);
             }
         },
-        error : function(result) {
+        error: function (result) {
             if (!autoSave) {
-                $.growl.error({ message: "Some errors occurred: " + result });
+                $.growl.error({message: "Some errors occurred: " + result});
             }
         },
         //timeout: autoSave ?saveNoteTimeout:0
-    }).always(function() {
+    }).always(function () {
         if (!autoSave) {
             unblockUI();
         }
     });
 
+}
+
+function createAndSelectNode(newNodeJson) {
+    var nodeId = $('#jstree_div').jstree("create_node", newNodeJson.parent, newNodeJson, 'last');
+    $('#jstree_div').jstree("deselect_all");
+    $('#jstree_div').jstree('select_node', nodeId);
 }
 
 function getSelectedFolderId(selectedNodeId) {
