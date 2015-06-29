@@ -1,9 +1,8 @@
-var cache = {};
-var allowSaveNote = true;
+var jsonProcessor = new JsonProcessor();
+
 var saveNoteTimeout = 400;
 
-var t1;
-var t2;
+var timer;
 
 $(document).ready(function() {
 
@@ -15,17 +14,10 @@ $(document).ready(function() {
 
     $('#editor').keyup(function () {
         if ($('#noteId').val() > 0) {
-
-            setTimeout(function() {
-                t2 = new Date().getTime();
-                if (allowSaveNote) {
-                    if (!t1 || ((t2-t1) > saveNoteTimeout)) {
-                        t1 = new Date().getTime();
-                        allowSaveNote = false;
-                        saveNote(true);
-                    }
-                }
-            }, 400);
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(function() {
+                saveNote(true);
+            }, saveNoteTimeout);
 
         }
 
@@ -57,60 +49,29 @@ function loadNotes(needDestroy) {
 
             var treeItems = [];
 
-            var rootNote = {
-                "parent" : '#',
-                "id" : 'folder_root',
-                "text" : 'Root',
-                "icon": "glyphicon glyphicon-folder-open",
-                "state"       : {
-                    opened    : true,
-                },
-            };
+            var rootNode = jsonProcessor.buildRootNode();
 
-            treeItems.push(rootNote);
+            treeItems.push(rootNode);
 
             for (var folder in folders) {
-                var parentNodeId = folders[folder].fields.parent_folder_id;
-                if (parentNodeId == -1) {
-                    parentNodeId = rootNote.id;
-                } else {
-                    parentNodeId = 'folder_' + parentNodeId;
-                }
                 treeItems.push(
-                    {
-                        "parent" : parentNodeId,
-                        "id" : 'folder_' + folders[folder].pk,
-                        "text" : folders[folder].fields.name,
-                        "icon": "glyphicon glyphicon-folder-open",
-                    }
+                    jsonProcessor.buildFolder(folders[folder].pk,
+                                                folders[folder].fields.parent_folder_id,
+                                                folders[folder].fields.name)
                 );
             }
 
 
             for (var note in notes) {
-                var parentNodeId = notes[note].fields.folder_id;
-                if (parentNodeId == -1) {
-                    parentNodeId = rootNote.id;
-                } else {
-                    parentNodeId = 'folder_' + parentNodeId;
-                }
                 treeItems.push(
-                    {
-                        "id" : 'note_' + notes[note].pk,
-                        "noteid" : notes[note].pk,
-                        "folderId" : notes[note].fields.folder_id,
-                        "hasFiles" : notes[note].fields.has_files,
-                        "parent" : parentNodeId,
-                        "text" : notes[note].fields.title,
-                        "icon": "glyphicon glyphicon-bookmark",
-                         "class": "jstree-dragable"
-                    }
+                    jsonProcessor.buildNote(notes[note].pk,
+                                            notes[note].fields.folder_id,
+                                            notes[note].fields.has_files,
+                                            notes[note].fields.title)
                 );
-
             }
 
             unblockUI();
-            cache['treeItems'] = treeItems;
 
             $('#jstree_div').jstree({
                 'core': {
@@ -139,6 +100,9 @@ function loadNotes(needDestroy) {
 
 
     $('#jstree_div').on("select_node.jstree", function (e, data) {
+        //open node
+        data.instance.toggle_node(data.node);
+
         var hasFiles = data.node.original.hasFiles;
         $('#editorLabel').text('Edit note');
         $('#submitBtn').hide();
@@ -177,10 +141,6 @@ function loadNotes(needDestroy) {
 
     });
 
-    //$('#jstree_div').on('delete_node.jstree', function (e, data) {
-    //    var noteId = data.node.original.noteid;
-    //    deleteNote(noteId);
-    //});
 };
 
 function loadNoteFiles(noteId) {
@@ -270,10 +230,6 @@ function prepareView4NewNote() {
     $('#submitBtn').show();
 }
 
-function prepareView4NewFolder() {
-
-}
-
 function saveFolder() {
     var folderName = $('#folderName').val();
     var parentFolderId = $('#folderId').val();
@@ -329,6 +285,12 @@ function saveNote(autoSave) {
         dataType: "text",
         success: function(result) {
             $("#noteId").val(result);
+
+            //todo save note
+            //$('#jstree_div').jstree("create_node", "#",
+            // {"data":JSON.parse('{"parent":"#","id":"folder_root1","text":"Root1","icon":"glyphicon glyphicon-folder-open",
+            // "state":{"opened":true}}') }, 'last');
+
             if (!autoSave) {
                 if (noteId == -1) {
                     $.growl.notice({title:'Notice!', message: "Note created successful." });
@@ -343,12 +305,11 @@ function saveNote(autoSave) {
                 $.growl.error({ message: "Some errors occurred: " + result });
             }
         },
-        timeout: autoSave ?saveNoteTimeout:0
+        //timeout: autoSave ?saveNoteTimeout:0
     }).always(function() {
         if (!autoSave) {
             unblockUI();
         }
-        allowSaveNote = true;
     });
 
 }
